@@ -8,27 +8,37 @@ import {
     FlatList,
     Alert,
 } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    addFoodGroupItem,
+    addNonFoodItem,
+    deleteFoodGroupItem,
+} from '../reducers/foodGroupReducer';
+import { deleteNonFoodItem } from '../reducers/nonFoodItemsReducer';
 
 const CreateListScreen = () => {
-    const [foodGroupItems, setFoodGroupItems] = useState([]);
-    const [nonFoodItems, setNonFoodItems] = useState([]);
     const [newItem, setNewItem] = useState('');
 
-    const addFoodGroupItem = () => {
+    const foodGroupItems = useSelector((state) => state.foodGroup.items);
+    const nonFoodItems = useSelector((state) => state.nonFoodItems.items);
+
+    const dispatch = useDispatch();
+
+    const handleAddFoodGroupItem = () => {
         if (newItem !== '') {
-            setFoodGroupItems([...foodGroupItems, newItem]);
+            dispatch(addFoodGroupItem(newItem));
             setNewItem('');
         }
     };
 
-    const addNonFoodItem = () => {
+    const handleAddNonFoodItem = () => {
         if (newItem !== '') {
-            setNonFoodItems([...nonFoodItems, newItem]);
+            dispatch(addNonFoodItem(newItem));
             setNewItem('');
         }
     };
 
-    const deleteFoodGroupItem = (index) => {
+    const handleDeleteFoodGroupItem = (index) => {
         Alert.alert(
             'Confirmation',
             'Are you sure you want to delete this item?',
@@ -37,13 +47,13 @@ const CreateListScreen = () => {
                 {
                     text: 'Delete',
                     style: 'destructive',
-                    onPress: () => confirmDeleteFoodGroupItem(index),
+                    onPress: () => dispatch(deleteFoodGroupItem(index)),
                 },
             ]
         );
     };
 
-    const deleteNonFoodItem = (index) => {
+    const handleDeleteNonFoodItem = (index) => {
         Alert.alert(
             'Confirmation',
             'Are you sure you want to delete this item?',
@@ -52,28 +62,16 @@ const CreateListScreen = () => {
                 {
                     text: 'Delete',
                     style: 'destructive',
-                    onPress: () => confirmDeleteNonFoodItem(index),
+                    onPress: () => dispatch(deleteNonFoodItem(index)),
                 },
             ]
         );
-    };
-
-    const confirmDeleteFoodGroupItem = (index) => {
-        const updatedItems = [...foodGroupItems];
-        updatedItems.splice(index, 1);
-        setFoodGroupItems(updatedItems);
-    };
-
-    const confirmDeleteNonFoodItem = (index) => {
-        const updatedItems = [...nonFoodItems];
-        updatedItems.splice(index, 1);
-        setNonFoodItems(updatedItems);
     };
 
     const renderFoodGroupItem = ({ item, index }) => (
         <TouchableOpacity
             style={styles.listItem}
-            onPress={() => deleteFoodGroupItem(index)}
+            onPress={() => handleDeleteFoodGroupItem(index)}
         >
             <Text>{item}</Text>
         </TouchableOpacity>
@@ -82,7 +80,7 @@ const CreateListScreen = () => {
     const renderNonFoodItem = ({ item, index }) => (
         <TouchableOpacity
             style={styles.listItem}
-            onPress={() => deleteNonFoodItem(index)}
+            onPress={() => handleDeleteNonFoodItem(index)}
         >
             <Text>{item}</Text>
         </TouchableOpacity>
@@ -102,13 +100,13 @@ const CreateListScreen = () => {
                 />
                 <TouchableOpacity
                     style={styles.addButton}
-                    onPress={addFoodGroupItem}
+                    onPress={handleAddFoodGroupItem}
                 >
                     <Text style={styles.buttonText}>Add to Food Group</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.addButton}
-                    onPress={addNonFoodItem}
+                    onPress={handleAddNonFoodItem}
                 >
                     <Text style={styles.buttonText}>Add to Non-Food Items</Text>
                 </TouchableOpacity>
@@ -182,20 +180,6 @@ const styles = StyleSheet.create({
         paddingVertical: 15,
         borderRadius: 10,
         marginTop: 20,
-    },
-
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        marginBottom: 10,
-    },
-
-    listItem: {
-        backgroundColor: '#eaeaea',
-        padding: 10,
-        marginBottom: 5,
-        borderRadius: 5,
     },
 });
 

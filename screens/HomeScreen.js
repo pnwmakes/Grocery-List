@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Bangers_400Regular } from '@expo-google-fonts/bangers';
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux';
+import { createList } from '../reducers/listReducer';
 
 const HomeScreen = () => {
     let [fontsLoaded] = useFonts({
@@ -10,8 +12,10 @@ const HomeScreen = () => {
     });
 
     const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     const handleCreateList = () => {
+        dispatch(createList());
         navigation.navigate('CreateList');
     };
 
