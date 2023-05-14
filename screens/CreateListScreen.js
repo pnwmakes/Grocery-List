@@ -11,18 +11,22 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import {
     addFoodGroupItem,
-    addNonFoodItem,
     deleteFoodGroupItem,
 } from '../reducers/foodGroupReducer';
-import { deleteNonFoodItem } from '../reducers/nonFoodItemsReducer';
+import {
+    addNonFoodItem,
+    deleteNonFoodItem,
+} from '../reducers/nonFoodItemsReducer';
+
+import { createList } from '../reducers/listReducer';
+import { useNavigation } from '@react-navigation/native';
 
 const CreateListScreen = () => {
     const [newItem, setNewItem] = useState('');
-
     const foodGroupItems = useSelector((state) => state.foodGroup.items);
     const nonFoodItems = useSelector((state) => state.nonFoodItems.items);
-
     const dispatch = useDispatch();
+    const navigation = useNavigation();
 
     const handleAddFoodGroupItem = () => {
         if (newItem !== '') {
@@ -39,33 +43,27 @@ const CreateListScreen = () => {
     };
 
     const handleDeleteFoodGroupItem = (index) => {
-        Alert.alert(
-            'Confirmation',
-            'Are you sure you want to delete this item?',
-            [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: () => dispatch(deleteFoodGroupItem(index)),
-                },
-            ]
-        );
+        dispatch(deleteFoodGroupItem(index));
+        Alert.alert('Item deleted');
     };
 
     const handleDeleteNonFoodItem = (index) => {
-        Alert.alert(
-            'Confirmation',
-            'Are you sure you want to delete this item?',
-            [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: () => dispatch(deleteNonFoodItem(index)),
-                },
-            ]
-        );
+        dispatch(deleteNonFoodItem(index));
+        Alert.alert('Item deleted');
+    };
+
+    const handleGenerateList = () => {
+        const mergedFoodGroupItems = [...foodGroupItems];
+        const mergedNonFoodItems = [...nonFoodItems];
+        if (
+            mergedFoodGroupItems.length === 0 &&
+            mergedNonFoodItems.length === 0
+        ) {
+            Alert.alert('No items added');
+        } else {
+            dispatch(createList(mergedFoodGroupItems, mergedNonFoodItems));
+            navigation.navigate('FinalList');
+        }
     };
 
     const renderFoodGroupItem = ({ item, index }) => (
@@ -125,7 +123,10 @@ const CreateListScreen = () => {
                     keyExtractor={(item, index) => index.toString()}
                 />
             </View>
-            <TouchableOpacity style={styles.generateButton}>
+            <TouchableOpacity
+                style={styles.generateButton}
+                onPress={handleGenerateList}
+            >
                 <Text style={styles.buttonText}>Generate List</Text>
             </TouchableOpacity>
         </View>
