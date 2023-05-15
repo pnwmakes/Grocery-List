@@ -60,6 +60,10 @@ const styles = StyleSheet.create({
     },
     checkedText: {
         textDecorationLine: 'line-through',
+        textDecorationColor: 'darkslategray',
+        textShadowColor: 'darkslategray',
+        textShadowOffset: { width: 1, height: 1 },
+        textShadowRadius: 2,
     },
     uncheckedText: {
         textDecorationLine: 'none',
