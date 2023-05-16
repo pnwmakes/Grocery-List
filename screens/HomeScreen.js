@@ -1,4 +1,3 @@
-import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import AppLoading from 'expo-app-loading';
 import { useFonts, Bangers_400Regular } from '@expo-google-fonts/bangers';
