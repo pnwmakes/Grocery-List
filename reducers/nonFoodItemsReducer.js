@@ -16,6 +16,13 @@ const nonFoodItemsReducer = (state = initialState, action) => {
                     (item, index) => index !== action.payload
                 ),
             };
+        case 'MOVE_NON_FOOD_ITEM_TO_FOOD_GROUP':
+            const { payload: index } = action;
+            const itemToMove = state.items[index];
+            return {
+                ...state,
+                items: state.items.filter((item, i) => i !== index),
+            };
         default:
             return state;
     }
@@ -28,6 +35,11 @@ export const addNonFoodItem = (item) => ({
 
 export const deleteNonFoodItem = (index) => ({
     type: 'DELETE_NON_FOOD_ITEM',
+    payload: index,
+});
+
+export const moveNonFoodItemToFoodGroup = (index) => ({
+    type: 'MOVE_NON_FOOD_ITEM_TO_FOOD_GROUP',
     payload: index,
 });
 

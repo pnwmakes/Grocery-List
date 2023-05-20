@@ -12,10 +12,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     addFoodGroupItem,
     deleteFoodGroupItem,
+    moveFoodGroupItemToNonFoodGroup,
 } from '../reducers/foodGroupReducer';
 import {
     addNonFoodItem,
     deleteNonFoodItem,
+    moveNonFoodItemToFoodGroup,
 } from '../reducers/nonFoodItemsReducer';
 
 import { createList } from '../reducers/listReducer';
@@ -43,13 +45,39 @@ const CreateListScreen = () => {
     };
 
     const handleDeleteFoodGroupItem = (index) => {
-        dispatch(deleteFoodGroupItem(index));
-        Alert.alert('Item deleted');
+        Alert.alert('Options', 'Choose an action', [
+            {
+                text: 'Delete',
+                onPress: () => dispatch(deleteFoodGroupItem(index)),
+                style: 'destructive',
+            },
+            {
+                text: 'Move to Non-Food Group',
+                onPress: () => handleMoveToNonFoodGroup(index),
+            },
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+        ]);
     };
 
     const handleDeleteNonFoodItem = (index) => {
-        dispatch(deleteNonFoodItem(index));
-        Alert.alert('Item deleted');
+        Alert.alert('Options', 'Choose an action', [
+            {
+                text: 'Delete',
+                onPress: () => dispatch(deleteNonFoodItem(index)),
+                style: 'destructive',
+            },
+            {
+                text: 'Move to Food Group',
+                onPress: () => handleMoveToFoodGroup(index),
+            },
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+        ]);
     };
 
     const handleGenerateList = () => {
@@ -64,6 +92,18 @@ const CreateListScreen = () => {
             dispatch(createList(mergedFoodGroupItems, mergedNonFoodItems));
             navigation.navigate('FinalList');
         }
+    };
+
+    const handleMoveToNonFoodGroup = (index) => {
+        const itemToMove = foodGroupItems[index];
+        dispatch(moveFoodGroupItemToNonFoodGroup(index));
+        dispatch(addNonFoodItem(itemToMove));
+    };
+
+    const handleMoveToFoodGroup = (index) => {
+        const itemToMove = nonFoodItems[index];
+        dispatch(moveNonFoodItemToFoodGroup(index));
+        dispatch(addFoodGroupItem(itemToMove));
     };
 
     const renderFoodGroupItem = ({ item, index }) => (
