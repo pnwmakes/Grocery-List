@@ -24,7 +24,7 @@ const HomeScreen = () => {
         return (
             <View style={styles.container}>
                 <Image
-                    source={require('../assets/images/grocery-bag.png')}
+                    source={require('../assets/images/bag3.png')}
                     style={styles.image}
                 />
                 <Text style={styles.text}>My Grocery List App!</Text>
@@ -45,21 +45,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#e8cf0e',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        paddingTop: 60,
+        paddingTop: 10,
     },
     image: {
         width: 300,
-        height: 300,
-        marginBottom: 20,
+        height: 400,
+        marginBottom: 1,
     },
     text: {
         fontSize: 45,
         fontFamily: 'Bangers_400Regular',
-        marginBottom: 20,
+        marginBottom: 30,
     },
     button: {
         backgroundColor: '#0e8ae8',
-        paddingVertical: 20,
+        paddingVertical: 10,
         paddingHorizontal: 40,
         borderRadius: 20,
     },
