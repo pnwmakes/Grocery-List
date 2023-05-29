@@ -1,12 +1,14 @@
+import React from 'react';
 import {
     View,
     Text,
     StyleSheet,
     FlatList,
     TouchableOpacity,
+    Alert,
 } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleItemChecked } from '../reducers/listReducer';
+import { toggleItemChecked, clearList } from '../reducers/listReducer';
 
 const FinalListScreen = () => {
     const mergedItems = useSelector((state) => state.list.items);
@@ -14,6 +16,20 @@ const FinalListScreen = () => {
 
     const toggleChecked = (index) => {
         dispatch(toggleItemChecked(index));
+    };
+
+    const clearListHandler = () => {
+        Alert.alert('Clear List', 'Are you sure you want to clear the list?', [
+            {
+                text: 'Cancel',
+                style: 'cancel',
+            },
+            {
+                text: 'Clear List',
+                style: 'destructive',
+                onPress: () => dispatch(clearList()),
+            },
+        ]);
     };
 
     const renderItem = ({ item, index }) => (
@@ -37,6 +53,12 @@ const FinalListScreen = () => {
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
             />
+            <TouchableOpacity
+                style={styles.clearButton}
+                onPress={clearListHandler}
+            >
+                <Text style={styles.clearButtonText}>Clear List</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -66,6 +88,19 @@ const styles = StyleSheet.create({
     },
     uncheckedText: {
         textDecorationLine: 'none',
+    },
+    clearButton: {
+        backgroundColor: 'red',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 10,
+        marginTop: 20,
+        alignSelf: 'center',
+    },
+    clearButtonText: {
+        fontSize: 16,
+        color: '#fff',
+        textAlign: 'center',
     },
 });
 

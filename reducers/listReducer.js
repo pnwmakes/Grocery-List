@@ -45,6 +45,11 @@ const listReducer = (state = initialState, action) => {
                 ...state,
                 items: updatedItems,
             };
+        case 'CLEAR_LIST':
+            return {
+                ...state,
+                items: [],
+            };
         default:
             return state;
     }
@@ -68,6 +73,10 @@ export const createList = (foodGroupItems, nonFoodItems) => {
 export const toggleItemChecked = (index) => ({
     type: 'TOGGLE_ITEM_CHECKED',
     payload: index,
+});
+
+export const clearList = () => ({
+    type: 'CLEAR_LIST',
 });
 
 export default listReducer;
