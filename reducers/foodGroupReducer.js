@@ -23,6 +23,11 @@ const foodGroupReducer = (state = initialState, action) => {
                     (item, index) => index !== action.payload
                 ),
             };
+        case 'CLEAR_FOOD_GROUP_ITEMS':
+            return {
+                ...state,
+                items: [],
+            };
         default:
             return state;
     }
@@ -41,6 +46,10 @@ export const deleteFoodGroupItem = (index) => ({
 export const moveFoodGroupItemToNonFoodGroup = (index) => ({
     type: 'MOVE_FOOD_GROUP_ITEM_TO_NON_FOOD_GROUP',
     payload: index,
+});
+
+export const clearFoodGroupItems = () => ({
+    type: 'CLEAR_FOOD_GROUP_ITEMS',
 });
 
 export default foodGroupReducer;

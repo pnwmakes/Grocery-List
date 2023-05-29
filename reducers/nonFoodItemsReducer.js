@@ -23,6 +23,11 @@ const nonFoodItemsReducer = (state = initialState, action) => {
                 ...state,
                 items: state.items.filter((item, i) => i !== index),
             };
+        case 'CLEAR_NON_FOOD_ITEMS':
+            return {
+                ...state,
+                items: [],
+            };
         default:
             return state;
     }
@@ -41,6 +46,10 @@ export const deleteNonFoodItem = (index) => ({
 export const moveNonFoodItemToFoodGroup = (index) => ({
     type: 'MOVE_NON_FOOD_ITEM_TO_FOOD_GROUP',
     payload: index,
+});
+
+export const clearNonFoodItems = () => ({
+    type: 'CLEAR_NON_FOOD_ITEMS',
 });
 
 export default nonFoodItemsReducer;

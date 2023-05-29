@@ -13,11 +13,13 @@ import {
     addFoodGroupItem,
     deleteFoodGroupItem,
     moveFoodGroupItemToNonFoodGroup,
+    clearFoodGroupItems,
 } from '../reducers/foodGroupReducer';
 import {
     addNonFoodItem,
     deleteNonFoodItem,
     moveNonFoodItemToFoodGroup,
+    clearNonFoodItems,
 } from '../reducers/nonFoodItemsReducer';
 
 import { createList } from '../reducers/listReducer';
@@ -80,6 +82,18 @@ const CreateListScreen = () => {
         ]);
     };
 
+    const handleMoveToNonFoodGroup = (index) => {
+        const itemToMove = foodGroupItems[index];
+        dispatch(moveFoodGroupItemToNonFoodGroup(index));
+        dispatch(addNonFoodItem(itemToMove));
+    };
+
+    const handleMoveToFoodGroup = (index) => {
+        const itemToMove = nonFoodItems[index];
+        dispatch(moveNonFoodItemToFoodGroup(index));
+        dispatch(addFoodGroupItem(itemToMove));
+    };
+
     const handleGenerateList = () => {
         const mergedFoodGroupItems = [...foodGroupItems];
         const mergedNonFoodItems = [...nonFoodItems];
@@ -94,16 +108,40 @@ const CreateListScreen = () => {
         }
     };
 
-    const handleMoveToNonFoodGroup = (index) => {
-        const itemToMove = foodGroupItems[index];
-        dispatch(moveFoodGroupItemToNonFoodGroup(index));
-        dispatch(addNonFoodItem(itemToMove));
+    const handleClearFoodGroupItems = () => {
+        Alert.alert(
+            'Clear Food Group Items',
+            'Are you sure you want to clear the Food Group items?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Clear',
+                    style: 'destructive',
+                    onPress: () => dispatch(clearFoodGroupItems()),
+                },
+            ]
+        );
     };
 
-    const handleMoveToFoodGroup = (index) => {
-        const itemToMove = nonFoodItems[index];
-        dispatch(moveNonFoodItemToFoodGroup(index));
-        dispatch(addFoodGroupItem(itemToMove));
+    const handleClearNonFoodItems = () => {
+        Alert.alert(
+            'Clear Non-Food Items',
+            'Are you sure you want to clear the Non-Food items?',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'Clear',
+                    style: 'destructive',
+                    onPress: () => dispatch(clearNonFoodItems()),
+                },
+            ]
+        );
     };
 
     const renderFoodGroupItem = ({ item, index }) => (
@@ -150,13 +188,29 @@ const CreateListScreen = () => {
                 </TouchableOpacity>
             </View>
             <View style={styles.listContainer}>
-                <Text style={styles.listHeading}>Food Group Items</Text>
+                <View style={styles.groupContainer}>
+                    <Text style={styles.listHeading}>Food Group Items</Text>
+                    <TouchableOpacity
+                        style={styles.clearButton}
+                        onPress={handleClearFoodGroupItems}
+                    >
+                        <Text style={styles.clearButtonText}>Clear</Text>
+                    </TouchableOpacity>
+                </View>
                 <FlatList
                     data={foodGroupItems}
                     renderItem={renderFoodGroupItem}
                     keyExtractor={(item, index) => index.toString()}
                 />
-                <Text style={styles.listHeading}>Non-Food Items</Text>
+                <View style={styles.groupContainer}>
+                    <Text style={styles.listHeading}>Non-Food Items</Text>
+                    <TouchableOpacity
+                        style={styles.clearButton}
+                        onPress={handleClearNonFoodItems}
+                    >
+                        <Text style={styles.clearButtonText}>Clear</Text>
+                    </TouchableOpacity>
+                </View>
                 <FlatList
                     data={nonFoodItems}
                     renderItem={renderNonFoodItem}
@@ -207,14 +261,29 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 1,
     },
+    groupContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 10,
+    },
     listHeading: {
         fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 10,
     },
     listItem: {
         fontSize: 16,
         marginBottom: 5,
+    },
+    clearButton: {
+        backgroundColor: 'red',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 5,
+    },
+    clearButtonText: {
+        color: '#fff',
+        fontWeight: 'bold',
     },
     generateButton: {
         backgroundColor: '#4CAF50',
