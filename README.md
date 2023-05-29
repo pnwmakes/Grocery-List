@@ -6,6 +6,8 @@ Add items to the food group or non-food group.
 Delete items from the list.
 Move items between the food group and non-food group.
 Generate a final grocery list.
+Delete full list from the food group and non-food groups list on the create grocery list page with alerts.
+Delete the final list after use with alert.
 Navigate between screens using the built-in navigation system.
 User-friendly and intuitive interface.
 Technologies Used
